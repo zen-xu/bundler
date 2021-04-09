@@ -10,7 +10,10 @@ import (
 var (
 	Purple = color.ColorFunc("magenta+h")
 	Red    = color.ColorFunc("red+h")
+	Yellow = color.ColorFunc("yellow+h")
+	Green  = color.ColorFunc("green+h")
 	Blue   = color.ColorFunc("blue+h")
+	Gray   = color.ColorFunc("black+h")
 	Bold   = color.ColorFunc("default+b")
 )
 

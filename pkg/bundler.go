@@ -25,7 +25,7 @@ func NewBundler(configPath string) (*Bundler, error) {
 	}, nil
 }
 
-func (b *Bundler) Bundle(outputPath string) (ignorePaths []string) {
+func (b *Bundler) Bundle(outputPath string, verbose bool) (ignorePaths []string) {
 	archivePath := "bundle.tar.gz"
 	archiver := NewArchiver(archivePath)
 	archivePaths, ignorePaths := b.config.GetArchivePaths()
@@ -33,6 +33,9 @@ func (b *Bundler) Bundle(outputPath string) (ignorePaths []string) {
 	var err error
 	for _, archivePath := range archivePaths {
 		err = archiver.Archive(archivePath, true)
+		if verbose {
+			fmt.Println(utils.Bold(fmt.Sprintf("add archive file '%s'", archivePath)))
+		}
 		utils.CheckError(err, fmt.Sprintf("Unable to add '%s' to bundle", archivePath))
 	}
 	archiver.Close()
