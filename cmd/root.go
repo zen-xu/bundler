@@ -16,11 +16,14 @@ type Option struct {
 	OutputPath string
 }
 
+const VERSION = "0.1.0"
+
 var option = Option{}
 var rootCmd = &cobra.Command{
-	Use:   "bundler [flags] config",
-	Short: "Bundler is tool for bundling resources into a single executable",
-	Long:  "Bundler is tool for bundling resources into a single executable",
+	Version: VERSION,
+	Use:     "bundler [flags] config",
+	Short:   "Bundler is tool for bundling resources into a single executable",
+	Long:    "Bundler is tool for bundling resources into a single executable",
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) != 1 {
 			return errors.New("requires config")
