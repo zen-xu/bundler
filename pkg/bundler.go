@@ -42,13 +42,35 @@ func (b *Bundler) Bundle(outputPath string, verbose bool) (ignorePaths []string)
 
 	execute := `#!/bin/bash
 set -eu
-export TMPDIR=$(mktemp -d /tmp/bundler.XXXXXX)
 ARCHIVE=$(awk '/^__BUNDLER_ARCHIVE__/ {print NR + 1; exit 0; }' $0)
 
+if [ $# -ne 0 ]; then
+	args=($*)
+	case ${args[0]} in
+		--unpack|-u)
+			tail -n+$ARCHIVE $0 | tar -xz
+			exit 0
+			;;
+		--help|-h)
+			echo This is a single executable bundle
+			echo
+			echo Usage:
+			echo "  $0 [flags] [arguments]"
+			echo
+			echo Flags:
+			echo "  -h, --help         help for $0"
+			echo "  -u, --unpack       unpack bundle"
+			exit 0
+	esac
+fi
+
+export TMPDIR=$(mktemp -d /tmp/bundler.XXXXXX)
 tail -n+$ARCHIVE $0 | tar -xz -C $TMPDIR
 
 pushd $TMPDIR > /dev/null
+{{ if ne .Command "" -}}
 {{.Command}} $*
+{{ end -}}
 popd > /dev/null
 rm -rf $TMPDIR
 

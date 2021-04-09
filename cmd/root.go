@@ -3,6 +3,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
+	"strings"
 
 	"github.com/spf13/cobra"
 	bundle "github.com/zen-xu/bundler/pkg"
@@ -40,6 +42,13 @@ var rootCmd = &cobra.Command{
 		}
 		fmt.Println(utils.Green("bundle success"))
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		if option.OutputPath == "" {
+			config := args[0]
+			configName := strings.TrimSuffix(config, filepath.Ext(config))
+			option.OutputPath = fmt.Sprintf("%s.bundle", configName)
+		}
+	},
 }
 
 func Execute() error {
@@ -49,6 +58,6 @@ func Execute() error {
 func init() {
 	cobra.OnInitialize()
 
-	rootCmd.Flags().StringVarP(&option.OutputPath, "output", "o", "bundle", "bundle output path")
+	rootCmd.Flags().StringVarP(&option.OutputPath, "output", "o", "", "bundle output path")
 	rootCmd.Flags().BoolVarP(&option.Verbose, "verbose", "v", false, "increase verbosity")
 }
