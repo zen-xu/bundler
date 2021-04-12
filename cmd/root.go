@@ -16,7 +16,7 @@ type Option struct {
 	OutputPath string
 }
 
-const VERSION = "0.1.0"
+const VERSION = "v0.1.1"
 
 var option = Option{}
 var rootCmd = &cobra.Command{
